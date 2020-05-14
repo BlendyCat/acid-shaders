@@ -52,12 +52,22 @@ void distort(inout vec4 position, in float distance2D) {
 
   float y = position.y;
   float x = position.x;
+  float z = position.z;
+
+  float breathX = (sin(frameTimeCounter*i))/100 * pow(distance2D, 1/4) * intensity();
+  float breathY = (sin(frameTimeCounter*i + (2 * PI/3)))/100 * pow(distance2D, 1/4) * intensity();
+  float breathZ = (sin(frameTimeCounter*i + (4 * PI/3)))/100 * pow(distance2D, 1/4) * intensity();
+
+  y*= 1 + breathX * BREATHING_INTENSITY;
+  x*= 1 + breathY * BREATHING_INTENSITY;
+  z*= 1 + breathZ * BREATHING_INTENSITY;
 
   float theta = sin(frameTimeCounter + intensity()) * sin(cos(frameTimeCounter/2400))/10 * ROTATION_STRENGTH;
 
   // rotation
   position.y = x * sin(theta) + y * cos(theta);
   position.x = x * cos(theta) - y * sin(theta);
+  position.z = z;
 }
 
 vec3 getAlbedo(in vec2 coord) {
